@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 app.use('/uploads', express.static('uploads')); 
 
 // MongoDB Connection
-const connectDB = require('./config/db');
+const connectDB = require('./src/app/config/db');
 
 connectDB();
 // mongoose.connect(process.env.MONGO_URI || 'your-default-mongo-uri', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -37,23 +37,23 @@ app.use((req, res, next) => {
 });
 
 // Import routes
-const userRoutes = require('./routes/userRoutes');
-const pageRoutes = require('./routes/pageRoutes');
-const serviceRoutes = require('./routes/serviceRoutes');
-const projectRoutes = require('./routes/projectRoutes'); // Ensure this is correctly defined
-const contactRoutes = require('./routes/contactRoutes'); 
-const blogRoutes = require('./routes/blogRoutes');
-const testimonialRoutes = require('./routes/testimonialRoutes');
-const mediaRoutes = require('./routes/mediaRoutes');
-const galleryRoutes = require('./routes/galleryRoutes');
-const seoRoutes = require('./routes/seoRoutes');
-const settingsRoutes = require('./routes/settingsRoutes');
-const subscriberRoutes = require('./routes/subscriberRoutes');
-const faqRoutes = require('./routes/faqRoutes');
-const careerRoutes = require('./routes/careerRoutes');
-const applicationRoutes = require('./routes/applicationRoutes');
+const userRoutes = require('./src/app/routes/authRoutes');
+const pageRoutes = require('./src/app/routes/pageRoutes');
+const serviceRoutes = require('./src/app/routes/serviceRoutes');
+const projectRoutes = require('./src/app/routes/projectRoutes'); // Ensure this is correctly defined
+const contactRoutes = require('./src/app/routes/contactRoutes'); 
+const blogRoutes = require('./src/app/routes/blogRoutes');
+const testimonialRoutes = require('./src/app/routes/testimonialRoutes');
+const mediaRoutes = require('./src/app/routes/mediaRoutes');
+const galleryRoutes = require('./src/app/routes/galleryRoutes');
+const seoRoutes = require('./src/app/routes/seoRoutes');
+const settingsRoutes = require('./src/app/routes/settingsRoutes');
+const subscriberRoutes = require('./src/app/routes/subscriberRoutes');
+const faqRoutes = require('./src/app/routes/faqRoutes');
+const careerRoutes = require('./src/app/routes/careerRoutes');
+const applicationRoutes = require('./src/app/routes/applicationRoutes');
 // const userRoutes = require('./routes/userRoutes');
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./src/app/routes/authRoutes');
 
 
 
