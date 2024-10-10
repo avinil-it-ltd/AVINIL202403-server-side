@@ -7,7 +7,7 @@ const router = express.Router();
 // Configure multer for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/resumes/'); // Specify the upload directory
+        cb(null, 'src/app/uploads/resumes/'); // Specify the upload directory
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to filename
@@ -16,17 +16,21 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Route to receive job applications
-router.post('/', upload.single('resume'), async (req, res) => {
+router.post('/submit', upload.single('resume'), async (req, res) => { // Changed to /submit
     const { name, email, careerId } = req.body;
 
     try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'Resume is required.' });
+        }
+
         const newApplication = new Application({
             name,
             email,
             careerId,
             resume: req.file.path // Store the resume file path
         });
-        
+
         await newApplication.save();
         return res.status(201).json({ message: 'Application submitted successfully!' });
     } catch (error) {

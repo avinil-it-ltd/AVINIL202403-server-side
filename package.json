@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts"
+    "dev": "nodemon src/server.ts",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +23,9 @@
     "mongoose": "^8.7.0",
     "multer": "^1.4.5-lts.1",
     "vercel": "^32.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.0"
   }
 }
