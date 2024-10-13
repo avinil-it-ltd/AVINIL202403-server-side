@@ -8,10 +8,10 @@ const path = require('path');
 // Configure multer for file upload
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/resumes'); // Directory to store resumes
+        cb(null, 'src/app/uploads/resumes/'); // Directory to store resumes
     },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname); // Ensure unique filenames
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to filename
     }
 });
 
@@ -38,35 +38,31 @@ exports.getAllApplications = async (req, res) => {
     }
 };
 
-// Create a new application with resume upload
-// exports.createApplication = (req, res) => {
-//     upload(req, res, async (err) => {
-//         if (err) {
-//             return res.status(400).json({ message: err.message });
-//         }
+// Get filtered applications
+exports.getFilteredApplications = async (req, res) => {
+    try {
+        const filters = {};
 
-//         const { name, email, careerId } = req.body;
-//         const resumePath = req.file ? req.file.path : null; // Get the file path if uploaded
+        // Check for career ID filter
+        if (req.query.careerId) {
+            filters.careerId = req.query.careerId;
+        }
 
-//         try {
-//             const application = new Application({
-//                 name,
-//                 email,
-//                 careerId,
-//                 resume: resumePath // Save resume file path
-//             });
+        // Check for isShortlisted filter
+        if (req.query.isShortlisted) {
+            filters.isShortlisted = req.query.isShortlisted === 'true';
+        }
 
-//             await application.save();
-//             res.status(201).json(application);
-//         } catch (error) {
-//             res.status(500).json({ error: error.message });
-//         }
-//     });
-// };
+        // Fetch applications from the database with the specified filters
+        const applications = await Application.find(filters).populate('careerId', 'title');
+        res.status(200).json(applications);
+    } catch (error) {
+        console.error('Error fetching applications:', error);
+        res.status(500).json({ message: 'Failed to fetch applications' });
+    }
+};
 
-
-
-
+// Create a new application
 exports.createApplication = async (req, res) => {
     try {
         const { name, email, careerId } = req.body;

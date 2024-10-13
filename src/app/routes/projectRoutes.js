@@ -1,30 +1,12 @@
 const express = require('express');
-const router = express.Router();
 const projectController = require('../controllers/projectController');
+const router = express.Router();
 
-router.get('/', (req, res) => {
-    console.log("GET /api/projects"); // Add this line
-    projectController.getAllProjects(req, res);
-});
-
-router.get('/:id', (req, res) => {
-    console.log(`GET /api/projects/${req.params.id}`); // Add this line
-    projectController.getProjectById(req, res);
-});
-
-router.post('/', (req, res) => {
-    console.log("POST /api/projects", req.body); // Add this line
-    projectController.createProject(req, res);
-});
-
-router.put('/:id', (req, res) => {
-    console.log(`PUT /api/projects/${req.params.id}`, req.body); // Add this line
-    projectController.updateProject(req, res);
-});
-
-router.delete('/:id', (req, res) => {
-    console.log(`DELETE /api/projects/${req.params.id}`); // Add this line
-    projectController.deleteProject(req, res);
-});
+// CRUD routes for projects
+router.post('/', projectController.createProject);
+router.get('/', projectController.getAllProjects);
+router.get('/:id', projectController.getProjectById);
+router.put('/:id', projectController.updateProject);
+router.delete('/:id', projectController.deleteProject);
 
 module.exports = router;

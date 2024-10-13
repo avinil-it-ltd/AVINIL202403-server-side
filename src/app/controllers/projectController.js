@@ -1,52 +1,164 @@
-// controllers/projectController.js
 const Project = require('../models/Project');
 
+// Create a new project
+exports.createProject = async (req, res) => {
+    try {
+        console.log('Received body:', req.body);
+
+        const {
+            title,
+            category,
+            subcategory,
+            client,
+            review,
+            startDate,
+            endDate,
+            description,
+            mainImage,
+            additionalImages
+        } = req.body;
+
+        if (!title || !client.name || !client.email) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        const newProject = new Project({
+            title,
+            category,
+            subcategory,
+            client: {
+                name: client.name,
+                email: client.email,
+                phone: client.phone
+            },
+            review: review ? {
+                rating: review.rating,
+                comment: review.comment
+            } : null,
+            startDate,
+            endDate,
+            description,
+            mainImage,
+            additionalImages: additionalImages || []
+        });
+
+        const savedProject = await newProject.save();
+
+        res.status(201).json({
+            message: 'Project created successfully',
+            project: savedProject
+        });
+    } catch (error) {
+        console.error('Mongoose Error:', error); // This will give more insight into the backend error
+        res.status(500).json({
+            message: 'Error creating project',
+            error: error.message
+        });
+    }
+};
+
+// Get all projects
 exports.getAllProjects = async (req, res) => {
     try {
         const projects = await Project.find();
-        res.status(200).json(projects); // Make sure this line sends data correctly
+        res.status(200).json({
+            message: 'Projects retrieved successfully',
+            projects
+        });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            message: 'Error retrieving projects',
+            error: error.message
+        });
     }
 };
 
-
+// Get a project by ID
 exports.getProjectById = async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id);
-        if (!project) return res.status(404).json({ message: 'Project not found' });
-        res.json(project);
+        const { id } = req.params;
+        const project = await Project.findById(id);
+
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        res.status(200).json({
+            message: 'Project retrieved successfully',
+            project
+        });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            message: 'Error retrieving project',
+            error: error.message
+        });
     }
 };
 
-exports.createProject = async (req, res) => {
-    try {
-        const { title, description, imageUrl, startDate, endDate } = req.body;
-        const project = new Project({ title, description, imageUrl, startDate, endDate });
-        await project.save();
-        res.status(201).json(project);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
+// Update a project by ID
+// Update a project by ID
 exports.updateProject = async (req, res) => {
     try {
-        const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json(project);
+        const { id } = req.params;
+        const updatedData = req.body;
+
+        // Fetch the existing project data
+        const existingProject = await Project.findById(id);
+        if (!existingProject) {
+            return res.status(404).json({ message: 'Project not found.' });
+        }
+
+        // Update fields individually
+        if (updatedData.title) existingProject.title = updatedData.title;
+        if (updatedData.category) existingProject.category = updatedData.category;
+        if (updatedData.subcategory) existingProject.subcategory = updatedData.subcategory;
+        if (updatedData.startDate) existingProject.startDate = updatedData.startDate;
+        if (updatedData.endDate) existingProject.endDate = updatedData.endDate;
+        if (updatedData.description) existingProject.description = updatedData.description;
+
+        // Handle main image
+        if (updatedData.deleteMainImage) {
+            existingProject.mainImage = ''; // Delete the main image
+        } else if (updatedData.mainImage) {
+            existingProject.mainImage = updatedData.mainImage; // Update with new main image
+        }
+
+        // Handle additional images
+        if (updatedData.additionalImages) {
+            existingProject.additionalImages = updatedData.additionalImages;
+        }
+
+        // Save the updated project
+        const updatedProject = await existingProject.save();
+
+        res.status(200).json({
+            message: 'Project updated successfully',
+            project: updatedProject
+        });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: 'Error updating project', error: error.message });
     }
 };
 
+
+// Delete a project by ID
 exports.deleteProject = async (req, res) => {
     try {
-        await Project.findByIdAndDelete(req.params.id);
-        res.json({ message: 'Project deleted' });
+        const { id } = req.params;
+
+        const deletedProject = await Project.findByIdAndDelete(id);
+
+        if (!deletedProject) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        res.status(200).json({
+            message: 'Project deleted successfully'
+        });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            message: 'Error deleting project',
+            error: error.message
+        });
     }
 };
-

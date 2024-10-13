@@ -41,6 +41,30 @@ exports.updateCareer = async (req, res) => {
     }
 };
 
+// Update status of a career
+exports.updateCareerStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        const career = await Career.findByIdAndUpdate(
+            id,
+            { status },
+            { new: true }
+        );
+
+        if (!career) {
+            return res.status(404).json({ message: 'Career not found' });
+        }
+
+        res.status(200).json({ message: 'Career status updated successfully', career });
+    } catch (error) {
+        console.error('Error updating career status:', error);
+        res.status(500).json({ message: 'Failed to update career status.' });
+    }
+};
+
+
 // Controller to delete a career
 exports.deleteCareer = async (req, res) => {
     try {

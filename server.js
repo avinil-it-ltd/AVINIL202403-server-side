@@ -1,7 +1,9 @@
+//server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
 
 // Load environment variables
 dotenv.config();
@@ -9,18 +11,14 @@ dotenv.config();
 // Initialize express app
 const app = express();
 const PORT = process.env.PORT || 5000;
-app.use('/uploads', express.static('uploads')); 
+// app.use('/uploads', express.static('uploads')); 
+app.use('/uploads', express.static(path.join(__dirname, 'src/app/uploads')));
 
 // MongoDB Connection
 const connectDB = require('./src/app/config/db');
 
 connectDB();
-// mongoose.connect(process.env.MONGO_URI || 'your-default-mongo-uri', { useNewUrlParser: true, useUnifiedTopology: true })
-//     .then(() => console.log('MongoDB connected'))
-//     .catch(err => {
-//         console.error('MongoDB connection error:', err);
-//         process.exit(1); // Exit the process if connection fails
-//     });
+
 
 // CORS Middleware
 app.use(cors({
@@ -40,6 +38,7 @@ app.use((req, res, next) => {
 const userRoutes = require('./src/app/routes/authRoutes');
 const pageRoutes = require('./src/app/routes/pageRoutes');
 const serviceRoutes = require('./src/app/routes/serviceRoutes');
+const categoryRoutes = require('./src/app/routes/categoryRoutes');
 const projectRoutes = require('./src/app/routes/projectRoutes'); // Ensure this is correctly defined
 const contactRoutes = require('./src/app/routes/contactRoutes'); 
 const blogRoutes = require('./src/app/routes/blogRoutes');
@@ -66,6 +65,7 @@ app.get('/', (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/pages', pageRoutes);
 app.use('/api/services', serviceRoutes);
+app.use('/api/categories', categoryRoutes);
 app.use('/api/projects', projectRoutes); 
 app.use('/api/contacts', contactRoutes); 
 app.use('/api/blogs', blogRoutes);
