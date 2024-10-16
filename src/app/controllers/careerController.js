@@ -4,7 +4,7 @@ const Career = require('../models/Career'); // Import your Career model
 exports.getAllCareers = async (req, res) => {
     try {
         const careers = await Career.find();
-        console.log('Careers fetched successfully:', careers);
+        // console.log('Careers fetched successfully:', careers);
         res.status(200).json(careers);
     } catch (error) {
         console.error('Error fetching careers:', error);

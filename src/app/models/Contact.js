@@ -1,10 +1,15 @@
-// models/Contact.js
+// src/app/models/Contact.js
+
 const mongoose = require('mongoose');
 
 const contactSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
     message: { type: String, required: true },
-}, { timestamps: true });
+    shortlisted: { type: Boolean, default: false }, // New field for shortlisted status
+});
 
-module.exports = mongoose.model('Contact', contactSchema);
+const Contact = mongoose.model('Contact', contactSchema);
+
+module.exports = Contact;
