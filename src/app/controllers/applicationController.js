@@ -1,10 +1,42 @@
 // src/app/controllers/applicationController.js
 const Application = require('../models/Application'); // Correct path
 
+// // Create a new application
+// const createApplication = async (req, res) => {
+//     try {
+//         const { name, email, phoneNumber, careerId, isShortlisted, photo } = req.body;
+
+//         // Create a new application object
+//         const applicationData = {
+//             name,
+//             email,
+//             phoneNumber,
+//             careerId,
+//             isShortlisted,
+//             // resume: req.file ? req.file.path : null, // Store the resume path if uploaded
+//             resume,
+//             photo // Assume photo URL is sent in the body
+//         };
+
+//         const application = new Application(applicationData);
+//         await application.save();
+//         res.status(201).json({ message: 'Application created successfully!', application });
+//     } catch (error) {
+//         res.status(500).json({ message: 'Error creating application', error: error.message });
+//     }
+// };
+
+
 // Create a new application
 const createApplication = async (req, res) => {
     try {
-        const { name, email, phoneNumber, careerId, isShortlisted, photo } = req.body;
+        // Destructure the body of the request
+        const { name, email, phoneNumber, careerId, resume, photo } = req.body;
+
+        // Validate required fields
+        if (!name || !email || !phoneNumber || !careerId || !resume || !photo) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
 
         // Create a new application object
         const applicationData = {
@@ -12,15 +44,17 @@ const createApplication = async (req, res) => {
             email,
             phoneNumber,
             careerId,
-            isShortlisted,
-            resume: req.file ? req.file.path : null, // Store the resume path if uploaded
-            photo // Assume photo URL is sent in the body
+            resume, // Ensure this is the Cloudinary URL for the resume
+            photo   // Assume photo URL is sent in the body
         };
 
+        // Create and save the application
         const application = new Application(applicationData);
         await application.save();
+        
         res.status(201).json({ message: 'Application created successfully!', application });
     } catch (error) {
+        console.error('Error creating application:', error); // Log the error for debugging
         res.status(500).json({ message: 'Error creating application', error: error.message });
     }
 };

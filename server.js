@@ -53,9 +53,10 @@ const careerRoutes = require('./src/app/routes/careerRoutes');
 const applicationRoutes = require('./src/app/routes/applicationRoutes');
 // const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./src/app/routes/authRoutes');
+const aboutRoutes = require('./src/app/routes/aboutRoutes');
+const myContactRoutes = require('./src/app/routes/myContactRoutes');
 
-
-
+// src\app\routes\myContactRoutes.js
 // Test route
 app.get('/', (req, res) => {
     res.send('Welcome to 3P Communications API!');
@@ -81,6 +82,11 @@ app.use('/api/applications', applicationRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/applications', applicationRoutes); // Use application routes
+app.use('/api/about', aboutRoutes); // Use application routes
+
+app.use('/api/Contact', contactRoutes);
+app.use('/api/myContact', myContactRoutes);
+
 
 // Start the server
 app.listen(PORT, () => {
