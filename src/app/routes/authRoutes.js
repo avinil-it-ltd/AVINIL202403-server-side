@@ -1,11 +1,13 @@
+// src/app/routes/authRoutes.js
 const express = require('express');
-const router = express.Router();
-const { register, login, changePassword } = require('../controllers/authController');
-const { protect } = require('../middleware/authMiddleware');
+const { login, updateCredentials, changePassword, register } = require('../controllers/authController');
+const auth = require('../middleware/authMiddleware');
 
-// Authentication Routes
-router.post('/register', register);
+const router = express.Router();
+
 router.post('/login', login);
-router.put('/change-password', protect, changePassword);
+router.post('/register', register);
+router.put('/update-credentials', auth, updateCredentials);
+router.put('/change-password', auth, changePassword);
 
 module.exports = router;

@@ -35,6 +35,27 @@ const ProjectSchema = new mongoose.Schema({
         type: String,
         required: true, // Make the description field required
         trim: true      // Trim any extra spaces
+    },
+    address: { // New field for the project address
+        type: String,
+        required: true, // Make address field required
+        trim: true      // Trim any extra spaces
+    },
+    budget: { // New field for the project budget
+        type: String,
+        required: true, // Make budget field required
+        min: 0          // Ensure budget cannot be negative
+    },
+    areaSize: { // New field for the project budget
+        type: String,
+        required: true, // Make budget field required
+        min: 0          // Ensure budget cannot be negative
+    },
+    status: { // New field for project status
+        type: String,
+        enum: ['pending', 'running', 'completed'], // Allowed values for status
+        required: true, // Make status field required
+        default: 'pending' // Default status is 'pending'
     }
 }, { timestamps: true }); // Automatically manage createdAt and updatedAt fields
 

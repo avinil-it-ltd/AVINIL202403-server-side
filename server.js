@@ -55,6 +55,8 @@ const applicationRoutes = require('./src/app/routes/applicationRoutes');
 const authRoutes = require('./src/app/routes/authRoutes');
 const aboutRoutes = require('./src/app/routes/aboutRoutes');
 const myContactRoutes = require('./src/app/routes/myContactRoutes');
+const policyRoutes = require('./src/app/routes/policyRoutes');
+
 
 // src\app\routes\myContactRoutes.js
 // Test route
@@ -63,7 +65,7 @@ app.get('/', (req, res) => {
 });
 
 // Use routes
-app.use('/api/users', userRoutes);
+app.use('/api/auth', userRoutes);
 app.use('/api/pages', pageRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/categories', categoryRoutes);
@@ -83,7 +85,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/applications', applicationRoutes); // Use application routes
 app.use('/api/about', aboutRoutes); // Use application routes
-
+// Use policy routes
+app.use('/api/policies', policyRoutes);
 app.use('/api/Contact', contactRoutes);
 app.use('/api/myContact', myContactRoutes);
 
