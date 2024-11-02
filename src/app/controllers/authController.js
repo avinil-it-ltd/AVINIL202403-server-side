@@ -8,6 +8,26 @@ const handleError = (res, message, statusCode = 500) => {
     console.error(message);
     return res.status(statusCode).json({ message });
 };
+
+
+// Get current user details
+exports.getUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password'); // Exclude password
+        if (!user) {
+            return handleError(res, 'User not found', 404);
+        }
+
+        res.status(200).json({ name: user.name, email: user.email, phone: user.phone });
+    } catch (error) {
+        handleError(res, 'Server error');
+    }
+};
+
+
+
+
+
 // Register a new user
 exports.register = async (req, res) => {
     const { name, email, password, phone, role } = req.body;
@@ -108,6 +128,7 @@ exports.updateCredentials = async (req, res) => {
 // Change password
 exports.changePassword = async (req, res) => {
     const { currentPassword, newPassword } = req.body;
+console.log(currentPassword,' ',newPassword);
 
     if (!currentPassword || !newPassword) {
         return handleError(res, 'Current and new passwords are required.', 400);
@@ -119,7 +140,8 @@ exports.changePassword = async (req, res) => {
             return handleError(res, 'User not found', 404);
         }
 
-        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        // const isMatch = await bcrypt.compare(currentPassword, user.password);
+        const isMatch = (currentPassword === user.password);
         if (!isMatch) {
             return handleError(res, 'Current password is incorrect.', 400);
         }
