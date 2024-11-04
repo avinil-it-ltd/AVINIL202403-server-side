@@ -147,7 +147,7 @@ console.log(currentPassword,' ',newPassword);
         }
 
         const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(newPassword, salt); // Hash the new password
+        user.password = newPassword // Hash the new password
         await user.save();
 
         res.status(200).json({ message: 'Password changed successfully!' });
