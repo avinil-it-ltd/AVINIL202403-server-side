@@ -22,8 +22,7 @@ connectDB();
 
 // CORS Middleware
 app.use(cors({
-    origin: [true,'http://localhost:3000','https://3pcommunication.com'] // Allow requests from frontend origin only
-    // origin:  // Allow requests from frontend origin only
+    origin: ['http://localhost:3000','https://3pcommunication.com'] 
 }));
 
 // Use express built-in JSON parser
