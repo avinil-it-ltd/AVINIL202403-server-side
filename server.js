@@ -35,6 +35,10 @@ app.use((req, res, next) => {
 });
 
 // Import routes
+
+const headlineRoutes = require('./src/app/routes/headlineRoutes');
+
+
 const userRoutes = require('./src/app/routes/authRoutes');
 const pageRoutes = require('./src/app/routes/pageRoutes');
 const serviceRoutes = require('./src/app/routes/serviceRoutes');
@@ -89,6 +93,7 @@ app.use('/api/about', aboutRoutes); // Use application routes
 app.use('/api/policies', policyRoutes);
 app.use('/api/Contact', contactRoutes);
 app.use('/api/myContact', myContactRoutes);
+app.use('/api/headlines', headlineRoutes);
 
 
 // Start the server
