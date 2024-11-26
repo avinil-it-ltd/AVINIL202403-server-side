@@ -13,21 +13,21 @@ const createApplication = async (req, res) => {
 
         // Create a new application object
         const applicationData = {
-            name,
-            email,
-            phoneNumber,
-            careerId,
-            resume, // Ensure this is the Cloudinary URL or proper file path
-            photo,  // Assume photo URL is sent in the body
-            description: description || '', // Optional field with default value
-            linkedinProfile: linkedinProfile || '', // Optional field with default value
-            portfolioLink: portfolioLink || '', // Optional field with default value
-            address: address || '', // Optional field with default value
+            name: req.body.name,
+            email: req.body.email,
+            phoneNumber: req.body.phoneNumber,
+            careerId: req.body.careerId,
+            description: req.body.description || '',
+            resume: req.body.resume || '',
+            resumePdfLink: req.body.resumePdfLink || '', // New field for PDF link
+            photo: req.body.photo || '',
+            linkedinProfile: req.body.linkedinProfile || '',
+            portfolioLink: req.body.portfolioLink || '',
+            address: req.body.address || '',
         };
-
-        // Create and save the application
         const application = new Application(applicationData);
         await application.save();
+        
 
         res.status(201).json({ message: 'Application created successfully!', application });
     } catch (error) {

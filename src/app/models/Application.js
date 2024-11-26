@@ -14,6 +14,10 @@ const applicationSchema = new mongoose.Schema({
         type: String, // URL or file path for the resume
         required: true, // Set to true if resume is mandatory
     },
+    resumePdfLink: {
+        type: String, // URL for the PDF resume
+        default: '', // Optional field
+    },
     careerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Career',
