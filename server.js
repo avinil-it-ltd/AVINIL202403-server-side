@@ -22,7 +22,9 @@ connectDB();
 
 // CORS Middleware
 app.use(cors({
-    origin: ['http://localhost:3000','https://3pcommunication.com'] 
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods if needed
+    allowedHeaders: ['Content-Type', 'Authorization'] // Specify allowed headers if needed
 }));
 
 // Use express built-in JSON parser
