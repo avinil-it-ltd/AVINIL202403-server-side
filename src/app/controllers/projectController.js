@@ -208,30 +208,38 @@ exports.createProject = async (req, res) => {
             status
         } = req.body;
 
-        if (!title || !client.name || !client.email || !address || !budget || !status) {
-            return res.status(400).json({ message: 'Missing required fields' });
+        if (!title || !client || !client.name || !client.email || !address || !budget || !status) {
+            return res.status(400).json({ message: 'Missing required fields: title, client name, client email, address, budget, and status are required.' });
         }
 
         const newProject = new Project({
             title,
             category,
             subcategory,
-            client: { name: client.name, email: client.email, phone: client.phone },
-            review: review ? { rating: review.rating, comment: review.comment } : null,
-            startDate,
-            endDate,
-            description,
+            client: { 
+                name: client.name, 
+                email: client.email, 
+                phone: client.phone || '' 
+            },
+            review: {
+                rating: review && review.rating ? Number(review.rating) : 5,
+                comment: review && review.comment ? review.comment : 'Initial review'
+            },
+            startDate: startDate || new Date(),
+            endDate: endDate || new Date(),
+            description: description || '',
             mainImage,
             additionalImages: additionalImages || [],
             address,
             budget,
-            areaSize,
+            areaSize: areaSize || '0',
             status
         });
 
         const savedProject = await newProject.save();
         res.status(201).json({ message: 'Project created successfully', project: savedProject });
     } catch (error) {
+        console.error('Error creating project:', error);
         res.status(500).json({ message: 'Error creating project', error: error.message });
     }
 };

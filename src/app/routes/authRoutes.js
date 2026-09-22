@@ -9,6 +9,6 @@ router.post('/login', login);
 router.post('/register', register);
 router.put('/update-credentials', auth, updateCredentials);
 router.put('/change-password', auth, changePassword);
-router.get('/user', auth, getUser); // Add this line
+router.get('/user', getUser); // Add this line
 
 module.exports = router;
