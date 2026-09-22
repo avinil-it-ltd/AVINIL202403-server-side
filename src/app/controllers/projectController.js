@@ -208,8 +208,8 @@ exports.createProject = async (req, res) => {
             status
         } = req.body;
 
-        if (!title || !client || !client.name || !client.email || !address || !budget || !status) {
-            return res.status(400).json({ message: 'Missing required fields: title, client name, client email, address, budget, and status are required.' });
+        if (!title || !address || !status) {
+            return res.status(400).json({ message: 'Missing required fields: title, address, and status are required.' });
         }
 
         const newProject = new Project({
@@ -217,9 +217,9 @@ exports.createProject = async (req, res) => {
             category,
             subcategory,
             client: { 
-                name: client.name, 
-                email: client.email, 
-                phone: client.phone || '' 
+                name: (client && client.name) ? String(client.name).trim() : '', 
+                email: (client && client.email) ? String(client.email).trim() : '', 
+                phone: (client && client.phone) ? String(client.phone).trim() : '' 
             },
             review: {
                 rating: review && review.rating ? Number(review.rating) : 5,
@@ -231,8 +231,8 @@ exports.createProject = async (req, res) => {
             mainImage,
             additionalImages: additionalImages || [],
             address,
-            budget,
-            areaSize: areaSize || '0',
+            budget: budget !== undefined && budget !== null ? String(budget).trim() : '',
+            areaSize: areaSize ? String(areaSize).trim() : '',
             status
         });
 
